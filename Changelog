@@ -45,7 +45,7 @@ version 2.8.6
 - ffmdec: reset packet_end in case of failure
 - avformat/ipmovie: put video decoding_map_size into packet and use it in decoder
 - avformat/brstm: fix overflow
-
+- V4L2 mem2mem HW accelerated codecs support
 
 version 2.8.5
 - avformat/hls: Even stricter URL checks

@@ -152,6 +152,7 @@ Component options:
 Hardware accelerators:
   --disable-d3d11va        disable D3D11VA code [autodetect]
   --disable-dxva2          disable DXVA2 code [autodetect]
+  --disable-v4l2_m2m       disable V4L2 mem2mem code [autodetect]
   --disable-vaapi          disable VAAPI code [autodetect]
   --disable-vda            disable VDA code [autodetect]
   --disable-vdpau          disable VDPAU code [autodetect]
@@ -1462,6 +1463,7 @@ FEATURE_LIST="
 HWACCEL_LIST="
     d3d11va
     dxva2
+    v4l2_m2m
     vaapi
     vda
     vdpau
@@ -2143,6 +2145,7 @@ mpegvideoenc_select="me_cmp mpegvideo pixblockdsp qpeldsp"
 qsvdec_select="qsv"
 qsvenc_select="qsv"
 v4l2_deps_any="linux_videodev2_h sys_videoio_h"
+v4l2_m2m_select="v4l2"
 
 # decoders / encoders
 aac_decoder_select="imdct15 mdct sinewin"
@@ -2217,11 +2220,15 @@ h261_decoder_select="mpegvideo"
 h261_encoder_select="aandcttables mpegvideoenc"
 h263_decoder_select="h263_parser h263dsp mpegvideo qpeldsp"
 h263_encoder_select="aandcttables h263dsp mpegvideoenc"
+h263_v4l2m2m_decoder_deps="v4l2_m2m"
+h263_v4l2m2m_encoder_deps="v4l2_m2m"
 h263i_decoder_select="h263_decoder"
 h263p_decoder_select="h263_decoder"
 h263p_encoder_select="h263_encoder"
 h264_decoder_select="cabac golomb h264chroma h264dsp h264pred h264qpel startcode videodsp"
 h264_decoder_suggest="error_resilience"
+h264_v4l2m2m_decoder_deps="v4l2_m2m"
+h264_v4l2m2m_encoder_deps="v4l2_m2m"
 h264_qsv_decoder_deps="libmfx"
 h264_qsv_decoder_select="h264_mp4toannexb_bsf h264_parser qsvdec h264_qsv_hwaccel"
 h264_qsv_encoder_deps="libmfx"
@@ -2270,9 +2277,11 @@ mpc7_decoder_select="bswapdsp mpegaudiodsp"
 mpc8_decoder_select="mpegaudiodsp"
 mpeg_xvmc_decoder_deps="X11_extensions_XvMClib_h"
 mpeg_xvmc_decoder_select="mpeg2video_decoder"
+mpeg1_v4l2m2m_decoder_deps="v4l2_m2m"
 mpegvideo_decoder_select="mpegvideo"
 mpeg1video_decoder_select="mpegvideo"
 mpeg1video_encoder_select="aandcttables mpegvideoenc h263dsp"
+mpeg2_v4l2m2m_decoder_deps="v4l2_m2m"
 mpeg2video_decoder_select="mpegvideo"
 mpeg2video_encoder_select="aandcttables mpegvideoenc h263dsp"
 mpeg2_qsv_decoder_deps="libmfx"
@@ -2281,6 +2290,8 @@ mpeg2_qsv_encoder_deps="libmfx"
 mpeg2_qsv_encoder_select="qsvenc"
 mpeg4_decoder_select="h263_decoder mpeg4video_parser"
 mpeg4_encoder_select="h263_encoder"
+mpeg4_v4l2m2m_decoder_deps="v4l2_m2m"
+mpeg4_v4l2m2m_encoder_deps="v4l2_m2m"
 msa1_decoder_select="mss34dsp"
 msmpeg4v1_decoder_select="h263_decoder"
 msmpeg4v2_decoder_select="h263_decoder"
@@ -2341,6 +2352,7 @@ utvideo_decoder_select="bswapdsp"
 utvideo_encoder_select="bswapdsp huffman huffyuvencdsp"
 vble_decoder_select="huffyuvdsp"
 vc1_decoder_select="blockdsp h263_decoder h264qpel intrax8 qpeldsp startcode"
+vc1_v4l2m2m_decoder_deps="v4l2_m2m"
 vc1image_decoder_select="vc1_decoder"
 vc1_qsv_decoder_deps="libmfx"
 vc1_qsv_decoder_select="qsvdec vc1_qsv_hwaccel"
@@ -2353,6 +2365,8 @@ vp6a_decoder_select="vp6_decoder"
 vp6f_decoder_select="vp6_decoder"
 vp7_decoder_select="h264pred videodsp vp8dsp"
 vp8_decoder_select="h264pred videodsp vp8dsp"
+vp8_v4l2m2m_decoder_deps="v4l2_m2m"
+vp8_v4l2m2m_encoder_deps="v4l2_m2m"
 vp9_decoder_select="videodsp vp9_parser"
 webp_decoder_select="vp8_decoder"
 wmalossless_decoder_select="llauddsp"
@@ -2919,7 +2933,7 @@ sws_max_filter_size_default=256
 set_default sws_max_filter_size
 
 # Enable hwaccels by default.
-enable d3d11va dxva2 vaapi vda vdpau videotoolbox xvmc
+enable d3d11va dxva2 v4l2_m2m vaapi vda vdpau videotoolbox xvmc
 enable xlib
 
 # build settings
@@ -5427,6 +5441,7 @@ check_header linux/fb.h
 check_header linux/videodev.h
 check_header linux/videodev2.h
 check_code cc linux/videodev2.h "struct v4l2_frmsizeenum vfse; vfse.discrete.width = 0;" && enable_safe struct_v4l2_frmivalenum_discrete
+check_code cc linux/videodev2.h "int i = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_VIDEO_M2M;" || disable v4l2_m2m
 
 check_header sys/videoio.h
 check_code cc sys/videoio.h "struct v4l2_frmsizeenum vfse; vfse.discrete.width = 0;" && enable_safe struct_v4l2_frmivalenum_discrete
