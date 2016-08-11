@@ -807,14 +807,14 @@ static int device_try_init(AVFormatContext *ctx,
     }
 
     if (!*desired_format) {
-        for (i = 0; vpriv_v4l_fmt_conversion_table[i].codec_id != AV_CODEC_ID_NONE; i++) {
+        for (i = 0; avpriv_v4l_fmt_conversion_table[i].codec_id != AV_CODEC_ID_NONE; i++) {
             if (ctx->video_codec_id == AV_CODEC_ID_NONE ||
                 avpriv_v4l_fmt_conversion_table[i].codec_id == ctx->video_codec_id) {
                 av_log(ctx, AV_LOG_DEBUG, "Trying to set codec:%s pix_fmt:%s\n",
                        avcodec_get_name(avpriv_v4l_fmt_conversion_table[i].codec_id),
                        (char *)av_x_if_null(av_get_pix_fmt_name(avpriv_v4l_fmt_conversion_table[i].ff_fmt), "none"));
 
-                *desired_format = ff_fmt_conversion_table[i].v4l2_fmt;
+                *desired_format = avpriv_v4l_fmt_conversion_table[i].v4l2_fmt;
                 ret = device_init(ctx, width, height, *desired_format);
                 if (ret >= 0)
                     break;
