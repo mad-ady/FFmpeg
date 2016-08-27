@@ -292,9 +292,10 @@ enum AVPixelFormat {
     AV_PIX_FMT_P010LE, ///< like NV12, with 10bpp per component, data in the high bits, zeros in the low bits, little-endian
     AV_PIX_FMT_P010BE, ///< like NV12, with 10bpp per component, data in the high bits, zeros in the low bits, big-endian
 
+    AV_PIX_FMT_NV12T,     ///< Same as NV12 except the coordinates differ: Z-shape tiled 64x32 macroblocks. V4L2 specific format corresponding to V4L2_PIX_FMT_NV12MT
+
     AV_PIX_FMT_NB,        ///< number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions
 
-    AV_PIX_FMT_NV12T,     ///< Same as NV12 except the coordinates differ: Z-shape tiled 64x32 macroblocks. V4L2 specific format corresponding to V4L2_PIX_FMT_NV12MT
 };
 
 #define AV_PIX_FMT_Y400A AV_PIX_FMT_GRAY8A
