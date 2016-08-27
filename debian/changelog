@@ -1,3 +1,9 @@
+ffmpeg (7:3.0.2-1ubuntu4) yakkety; urgency=medium
+
+  * Add v4l2_m2m encoder and decoder 
+
+ -- memeka <mihailescu2m@gmail.com>  Sat, 27 Aug 2016 14:45:34 +0930
+
 ffmpeg (7:3.0.2-1ubuntu3) yakkety; urgency=medium
 
   * debian/patches/0001-tests-checkasm-pixblockdsp-Test-8-byte-aligned-posit.patch:
