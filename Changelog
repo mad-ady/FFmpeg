@@ -19,7 +19,7 @@ version 3.0.2:
 - Changelog: Make formating consistent
 - avfilter/src_movie: fix how we check for overflows with seek_point
 - avcodec/j2kenc: Add attribution to OpenJPEG project:
-
+- V4L2 mem2mem HW accelerated codecs support
 
 version 3.0.1:
 - avcodec/libutvideodec: copy frame so it has reference counters when refcounted_frames is set
