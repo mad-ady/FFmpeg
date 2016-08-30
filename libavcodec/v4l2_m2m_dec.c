@@ -131,9 +131,29 @@ static int v4lm2m_decode_frame(AVCodecContext *avctx, void *data,
         try_start(avctx);
 
     /* Send regular packet, or one empty packet to notify EOS */
-    if(avpkt->size || s->output_pool.streamon)
+    if(avpkt->size || s->output_pool.streamon) {
+        if (s->bsf) {
+            uint8_t *p_filtered = NULL;
+            int      n_filtered = 0;
+            ret = av_bitstream_filter_filter(s->bsf, avctx, NULL,
+                &p_filtered, &n_filtered,
+                avpkt->data, avpkt->size, avpkt->flags & AV_PKT_FLAG_KEY);
+            if (ret >=0) {
+                if (p_filtered && p_filtered != avpkt->data) {
+                    //av_free(avpkt->data);
+                    avpkt->data = p_filtered;
+                    avpkt->size = n_filtered;
+                    av_log(avctx, AV_LOG_ERROR, "packet was successfully converted to annexb\n");
+                } else {
+                    av_log(avctx, AV_LOG_ERROR, "packet was successfully converted to annexb BUT IT CAME OUT EMPTY?\n");
+                }
+            } else {
+                av_log(avctx, AV_LOG_ERROR, "packet was not converted to annexb\n");
+            }
+        }
         if((ret = avpriv_v4l_enqueue_frame_or_pkt_or_buf(&s->output_pool, NULL, avpkt, NULL, 0)) < 0)
             return ret;
+    }
 
     if(!s->capture_pool.streamon)
         try_start(avctx);

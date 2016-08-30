@@ -255,6 +255,16 @@ int avpriv_v4lm2m_init(V4Lm2mContext* s, void* log_ctx) {
 
 int ff_v4lm2m_codec_init(AVCodecContext *avctx) {
     V4Lm2mContext *s = avctx->priv_data;
+    if (avctx->codec_id == AV_CODEC_ID_H264) {
+        av_log(avctx, AV_LOG_INFO, "H264 codec detected, init annexb converter\n");
+        s->bsf = av_bitstream_filter_init("h264_mp4toannexb");
+        //regarding ticks_per_frame description, should be 2 for h.264:
+        avctx->ticks_per_frame = 2;
+        if (!s->bsf) {
+            av_log(avctx, AV_LOG_INFO, "ERROR CREATING ANNEXB CONVERTER\n");
+            return AVERROR(ENOMEM);
+        }
+    }
     return avpriv_v4lm2m_init(s, avctx);
 }
 
@@ -272,6 +282,10 @@ int avpriv_v4lm2m_end(V4Lm2mContext* s) {
 int ff_v4lm2m_codec_end(AVCodecContext *avctx) {
     V4Lm2mContext *s = avctx->priv_data;
 
+    if (s->bsf) {
+        av_bitstream_filter_close(s->bsf);
+        av_log(avctx, AV_LOG_DEBUG, "Closing annexb filter\n");
+    }
     av_log(avctx, AV_LOG_DEBUG, "Closing context\n");
     return avpriv_v4lm2m_end(s);
 }

@@ -68,6 +68,9 @@ typedef struct V4Lm2mContext {
     char *devname;
     struct v4l2_capability cap;
 
+    // the filter for converting to Annex B
+    AVBitStreamFilterContext *bsf;
+
     int64_t output_pool_offset_storage;
     int output_pool_needs_format;
     int output_pool_needs_init;
