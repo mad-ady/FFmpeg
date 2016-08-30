@@ -70,6 +70,7 @@ typedef struct V4Lm2mContext {
 
     // the filter for converting to Annex B
     AVBitStreamFilterContext *bsf;
+    enum Device_type {decoder, encoder} device_type;
 
     int64_t output_pool_offset_storage;
     int output_pool_needs_format;
