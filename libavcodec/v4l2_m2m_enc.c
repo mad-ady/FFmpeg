@@ -112,7 +112,7 @@ static av_cold int v4lm2m_encode_init(AVCodecContext *avctx) {
                  SET_V4L_EXT_CTRL(value, V4L2_CID_MPEG_VIDEO_H264_PROFILE, val, V4L2_CTRL_CLASS_MPEG, "h264 profile");
             SET_V4L_EXT_CTRL(value, V4L2_CID_MPEG_VIDEO_H264_MIN_QP, avctx->qmin, V4L2_CTRL_CLASS_MPEG, "minimum video quantizer scale");
 //            SET_V4L_EXT_CTRL(value, V4L2_CID_MPEG_VIDEO_H264_MAX_QP, avctx->qmax, V4L2_CTRL_CLASS_MPEG, "maximum video quantizer scale");
-	    avctx->qmax=51; //for Samsung the encoder goes to 51
+//	    avctx->qmax=51; //for Samsung the encoder goes to 51
             SET_V4L_EXT_CTRL(value, V4L2_CID_MPEG_VIDEO_H264_MAX_QP, avctx->qmax, V4L2_CTRL_CLASS_MPEG, "maximum video quantizer scale");
             av_log(avctx, AV_LOG_ERROR, "Min/max quantizer scale: %d, %d\n", avctx->qmin, avctx->qmax);
 	    SET_V4L_EXT_CTRL(value, V4L2_CID_MPEG_VIDEO_H264_LEVEL, 10, V4L2_CTRL_CLASS_MPEG, "h264 profile");
